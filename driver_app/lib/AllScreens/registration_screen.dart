@@ -1,3 +1,5 @@
+import 'package:driver_app/AllScreens/car_info_screen.dart';
+import 'package:driver_app/config_maps.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:driver_app/AllScreens/login_screen.dart';
@@ -192,12 +194,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         "phone": phoneTextEditingController.text.trim()
       };
 
-      usersPref.child(firebaseUser.uid).set(userDataMap);
+      driversPref.child(firebaseUser.uid).set(userDataMap);
+      currentFirebaseUser = firebaseUser;
+      
       displayToastMessage(
           "Congratulations, your account has beend created.", context);
 
-      Navigator.pushNamedAndRemoveUntil(
-          context, MainScreen.idScreen, (route) => false);
+      Navigator.pushNamed(context, CarInfoScreen.idScreen);
     } else {
       // Error occured - display error message
 

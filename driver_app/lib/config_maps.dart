@@ -7,3 +7,4 @@ const String mapSDKKeyIOS = "AIzaSyCjtSrUhBa1kz-lN2YhH4MLf7oKIXJ_Zu0";
 
 User? firebaseUser;
 Users? userCurrentInfo;
+User? currentFirebaseUser;
