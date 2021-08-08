@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "373201633596",
+    "firebase_url": "https://rider-app-a051f-default-rtdb.firebaseio.com",
+    "project_id": "rider-app-a051f",
+    "storage_bucket": "rider-app-a051f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:373201633596:android:3aafa234a5e4f3db609e39",
+        "android_client_info": {
+          "package_name": "com.hutomosaktikartiko.driverapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "373201633596-mn28m6d40fje7ngv144e7furgae5rnnj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCO57l23hABhgDeURiekF66EwFIYjiKMnM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "373201633596-mn28m6d40fje7ngv144e7furgae5rnnj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "373201633596-0d6bs2764q1r9p72hpt2gr4p1f1ggso6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hutomosaktikartiko.riderapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:373201633596:android:ff487515120853d3609e39",
+        "android_client_info": {
+          "package_name": "com.hutomosaktikartiko.riderapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "373201633596-mn28m6d40fje7ngv144e7furgae5rnnj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCO57l23hABhgDeURiekF66EwFIYjiKMnM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "373201633596-mn28m6d40fje7ngv144e7furgae5rnnj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "373201633596-0d6bs2764q1r9p72hpt2gr4p1f1ggso6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hutomosaktikartiko.riderapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
