@@ -1,4 +1,5 @@
 import 'package:driver_app/AllScreens/car_info_screen.dart';
+import 'package:driver_app/config_maps.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -12,6 +13,9 @@ import 'package:driver_app/DataHandler/app_data.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  currentFirebaseUser = FirebaseAuth.instance.currentUser;
+
   runApp(MyApp());
 }
 
@@ -19,6 +23,8 @@ DatabaseReference usersPref =
     FirebaseDatabase.instance.reference().child("users");
 DatabaseReference driversPref =
     FirebaseDatabase.instance.reference().child("drivers");
+DatabaseReference riderRequestPref =
+    FirebaseDatabase.instance.reference().child("drivers").child(currentFirebaseUser?.uid ?? "").child("newRide");
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -32,7 +38,7 @@ class MyApp extends StatelessWidget {
             primaryColor: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity),
         initialRoute: (FirebaseAuth.instance.currentUser == null)
-            ? MainScreen.idScreen
+            ? LoginScreen.idScreen
             : MainScreen.idScreen,
         routes: {
           RegistrationScreen.idScreen: (context) => RegistrationScreen(),

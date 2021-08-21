@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'package:driver_app/config_maps.dart';
+import 'package:driver_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_geofire/flutter_geofire.dart';
 
 class HomeTabPage extends StatefulWidget {
   const HomeTabPage({Key? key}) : super(key: key);
@@ -73,7 +76,10 @@ class _HomeTabPageState extends State<HomeTabPage> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: RaisedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      makeDriverOnlineNow();
+                      getLocationLiveUpdates();
+                    },
                     color: Colors.green,
                     child: Padding(
                       padding: EdgeInsets.all(17),
@@ -81,7 +87,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Online now",
+                            "Offline now - Go Online",
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -102,5 +108,29 @@ class _HomeTabPageState extends State<HomeTabPage> {
             ))
       ],
     );
+  }
+
+  void makeDriverOnlineNow() async {
+
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    currentPosition = position;
+    
+    Geofire.initialize("availableDrivers");
+    Geofire.setLocation(currentFirebaseUser?.uid ?? "",
+        currentPosition!.latitude, currentPosition!.longitude);
+
+    riderRequestPref.onValue.listen((event) {});
+  }
+
+  void getLocationLiveUpdates() {
+    homeTabPageStreamSubscription = Geolocator.getPositionStream().listen((Position position) {
+      currentPosition = position;
+      Geofire.setLocation(currentFirebaseUser!.uid, position.latitude, position.longitude);
+      LatLng latlng = LatLng(
+        position.latitude, position.longitude
+      );
+      newGoogleMapController?.animateCamera(CameraUpdate.newLatLng(latlng));
+    });
   }
 }
