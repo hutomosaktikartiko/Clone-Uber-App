@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:driver_app/AllScreens/registration_screen.dart';
 import 'package:driver_app/config_maps.dart';
 import 'package:driver_app/main.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,10 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
   Position? currentPosition;
   var geolocator = Geolocator();
+
+  String driverStatusText = "Offline Now - Go Online";
+  Color driverStatusColor = Colors.black;
+  bool isDriverAvailable = false;
 
   void locatePosition() async {
     Position position = await Geolocator.getCurrentPosition(
@@ -77,17 +82,36 @@ class _HomeTabPageState extends State<HomeTabPage> {
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: RaisedButton(
                     onPressed: () {
-                      makeDriverOnlineNow();
-                      getLocationLiveUpdates();
+                      if (isDriverAvailable != true) {
+                        makeDriverOnlineNow();
+                        getLocationLiveUpdates();
+
+                        setState(() {
+                          driverStatusText = "Online Now";
+                          driverStatusColor = Colors.green;
+                          isDriverAvailable = true;
+                        });
+
+                        displayToastMessage("You are Online Now", context);
+                      } else {
+                        makeDriverOfflineNow();
+                        setState(() {
+                          driverStatusText = "Offline Now - Go Online";
+                          driverStatusColor = Colors.black;
+                          isDriverAvailable = false;
+                        });
+
+                        displayToastMessage("You are Offline Now", context);
+                      }
                     },
-                    color: Colors.green,
+                    color: driverStatusColor,
                     child: Padding(
                       padding: EdgeInsets.all(17),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Offline now - Go Online",
+                            driverStatusText,
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -111,11 +135,10 @@ class _HomeTabPageState extends State<HomeTabPage> {
   }
 
   void makeDriverOnlineNow() async {
-
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     currentPosition = position;
-    
+
     Geofire.initialize("availableDrivers");
     Geofire.setLocation(currentFirebaseUser?.uid ?? "",
         currentPosition!.latitude, currentPosition!.longitude);
@@ -124,13 +147,22 @@ class _HomeTabPageState extends State<HomeTabPage> {
   }
 
   void getLocationLiveUpdates() {
-    homeTabPageStreamSubscription = Geolocator.getPositionStream().listen((Position position) {
+    homeTabPageStreamSubscription =
+        Geolocator.getPositionStream().listen((Position position) {
       currentPosition = position;
-      Geofire.setLocation(currentFirebaseUser!.uid, position.latitude, position.longitude);
-      LatLng latlng = LatLng(
-        position.latitude, position.longitude
-      );
+      if (isDriverAvailable) {
+        Geofire.setLocation(
+            currentFirebaseUser!.uid, position.latitude, position.longitude);
+      }
+
+      LatLng latlng = LatLng(position.latitude, position.longitude);
       newGoogleMapController?.animateCamera(CameraUpdate.newLatLng(latlng));
     });
+  }
+
+  void makeDriverOfflineNow() {
+    Geofire.removeLocation(currentFirebaseUser!.uid);
+    riderRequestPref.onDisconnect();
+    riderRequestPref.remove();
   }
 }
