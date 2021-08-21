@@ -1,3 +1,4 @@
+import 'package:driver_app/config_maps.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -149,8 +150,9 @@ class _LoginScreenState extends State<LoginScreen> {
         .user;
 
     if (firebaseUser != null) {
-      usersPref.child(firebaseUser.uid).once().then((DataSnapshot snap) {
+      driversPref.child(firebaseUser.uid).once().then((DataSnapshot snap) {
         if (snap.value != null) {
+          currentFirebaseUser = firebaseUser;
           Navigator.pushNamedAndRemoveUntil(
               context, MainScreen.idScreen, (route) => false);
           displayToastMessage("You are logged-in now", context);
