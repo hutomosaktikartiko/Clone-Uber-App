@@ -55,6 +55,51 @@ class _HomeTabPageState extends State<HomeTabPage> {
             locatePosition();
           },
         ),
+
+        // online offline driver
+        Container(
+          height: 140,
+          width: double.infinity,
+          color: Colors.black54,
+        ),
+
+        Positioned(
+            top: 60,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: RaisedButton(
+                    onPressed: () {},
+                    color: Colors.green,
+                    child: Padding(
+                      padding: EdgeInsets.all(17),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Online now",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Icon(
+                            Icons.phone_android,
+                            color: Colors.white,
+                            size: 26,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ))
       ],
     );
   }
