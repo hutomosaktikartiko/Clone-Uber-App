@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
             primaryColor: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity),
         initialRoute: (FirebaseAuth.instance.currentUser == null)
-            ? LoginScreen.idScreen
+            ? MainScreen.idScreen
             : MainScreen.idScreen,
         routes: {
           RegistrationScreen.idScreen: (context) => RegistrationScreen(),
