@@ -2,10 +2,13 @@ import 'dart:async';
 import 'package:driver_app/AllScreens/registration_screen.dart';
 import 'package:driver_app/config_maps.dart';
 import 'package:driver_app/main.dart';
+import 'package:driver_app/notifications/push_notification_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class HomeTabPage extends StatefulWidget {
   const HomeTabPage({Key? key}) : super(key: key);
@@ -30,6 +33,12 @@ class _HomeTabPageState extends State<HomeTabPage> {
   Color driverStatusColor = Colors.black;
   bool isDriverAvailable = false;
 
+  @override
+  void initState() {
+    getCurrentDriverInfo();
+    super.initState();
+  }
+
   void locatePosition() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -45,6 +54,13 @@ class _HomeTabPageState extends State<HomeTabPage> {
     // String address =
     //     await AssistantMethods.searchCoordinateAddress(position, context);
     // print("{ THIS IS YOUR ADDRESS $address }");
+  }
+
+  void getCurrentDriverInfo() async {
+    currentFirebaseUser = FirebaseAuth.instance.currentUser;
+    PushNotificationService pushNotificationService = PushNotificationService();
+
+    pushNotificationService.getToken();
   }
 
   @override

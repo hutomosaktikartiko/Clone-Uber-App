@@ -9,14 +9,25 @@ import 'package:driver_app/AllScreens/main_screen.dart';
 import 'package:driver_app/AllScreens/registration_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:driver_app/DataHandler/app_data.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   currentFirebaseUser = FirebaseAuth.instance.currentUser;
 
   runApp(MyApp());
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // if you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  
+
+  print("{ HANDLING A BACKGROUND MESSAGE ${message.messageId} }");
 }
 
 DatabaseReference usersPref =
