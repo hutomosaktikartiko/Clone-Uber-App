@@ -1,5 +1,6 @@
 class NearbyAvailableDrivers {
-  String? key, latitude, longitude;
+  String? key;
+  double? latitude, longitude;
 
   NearbyAvailableDrivers({this.longitude, this.latitude, this.key});
 }
