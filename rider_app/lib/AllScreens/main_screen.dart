@@ -11,12 +11,15 @@ import 'package:geolocator/geolocator.dart';
 import 'package:rider_app/AllWidgets/progress_dialog.dart';
 import 'package:rider_app/Assistans/assistant_methods.dart';
 import 'package:provider/provider.dart';
+import 'package:rider_app/Assistans/geofire_assistant.dart';
 import 'package:rider_app/DataHandler/app_data.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rider_app/Models/direction_details.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:rider_app/Models/nearby_available_drivers.dart';
 import 'package:rider_app/config_maps.dart';
+import 'package:flutter_geofire/flutter_geofire.dart';
 
 class MainScreen extends StatefulWidget {
   static const String idScreen = "mainScreen";
@@ -792,6 +795,59 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     setState(() {
       circlesSet.add(pickUpLockCircle);
       circlesSet.add(dropOffLockCircle);
+    });
+  }
+
+  void initGeofireListener() {
+    Geofire.initialize("avalableDivers");
+
+    Geofire.queryAtLocation(
+            currentPosition?.latitude ?? 0, currentPosition?.longitude ?? 0, 15)
+        ?.listen((map) {
+      print(map);
+      if (map != null) {
+        var callBack = map['callBack'];
+
+        //latitude will be retrieved from map['latitude']
+        //longitude will be retrieved from map['longitude']
+
+        switch (callBack) {
+          case Geofire.onKeyEntered:
+            NearbyAvailableDrivers nearbyAvailableDrivers =
+                NearbyAvailableDrivers();
+            nearbyAvailableDrivers.key = map['key'];
+            nearbyAvailableDrivers.latitude = map['latitude'];
+            nearbyAvailableDrivers.longitude = map['longitude'];
+            GeofireAssistant.nearbyAvailableDriversList
+                .add(nearbyAvailableDrivers);
+
+            break;
+
+          case Geofire.onKeyExited:
+            GeofireAssistant.removeDriverFromList(map['key']);
+            
+            break;
+
+          case Geofire.onKeyMoved:
+            // Update your key's location
+            NearbyAvailableDrivers nearbyAvailableDrivers =
+                NearbyAvailableDrivers();
+            nearbyAvailableDrivers.key = map['key'];
+            nearbyAvailableDrivers.latitude = map['latitude'];
+            nearbyAvailableDrivers.longitude = map['longitude'];
+            GeofireAssistant.updatDriverNearbyLocation(nearbyAvailableDrivers);
+
+            break;
+
+          case Geofire.onGeoQueryReady:
+            // All Intial Data is loaded
+            print(map['result']);
+
+            break;
+        }
+      }
+
+      setState(() {});
     });
   }
 }
